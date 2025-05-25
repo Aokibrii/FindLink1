@@ -1,0 +1,117 @@
+Lost and Found System Flowchart - Text Description
+==================================================
+
+1. Start/End Points (Ovals)
+   - "User Visits Website" (start)
+   - "Session Ended" (end)
+
+2. Processes (Rectangles)
+   - Login/Register Page
+   - User Dashboard
+   - Admin Dashboard
+   - Post Item Form
+   - View Items Page
+   - Item Details Page
+   - Profile Page
+   - Notifications Page
+   - Search Results
+   - Image Upload Process
+   - Form Validation
+   - Password Reset Process
+
+3. Decision Points (Diamonds)
+   - "User has account?"
+   - "Valid credentials?"
+   - "User role?" (admin/user)
+   - "Item type?" (lost/found)
+   - "User's own post?"
+   - "Update status?"
+   - "Delete post?"
+   - "Form valid?"
+
+4. Data Storage (Cylinders)
+   - users_db (users table)
+   - user_db (posts table)
+   - user_db (notifications table)
+   - File storage (for images)
+
+5. Data Flow (Arrows)
+   - Connect all shapes with directional arrows
+   - Use solid lines for normal flow
+   - Use dashed lines for optional paths or returns
+
+6. Input/Output (Parallelograms)
+   - User enters credentials
+   - User fills form data
+   - System displays items
+   - System shows notifications
+   - Display error messages
+
+7. Document Symbols (Document shape)
+   - Generated reports (admin)
+   - Item listings
+   - User profile
+
+8. Connectors (Small Circles)
+   - Use these to connect different sections of your flowchart if it spans multiple areas
+
+
+Full System Flow:
+-----------------
+
+1. User visits website (Oval)
+2. Login/Register Page (Rectangle)
+3. Decision: User has account? (Diamond)
+   - Yes: Login Form (Rectangle)
+   - No: Register Form (Rectangle)
+4. Registration Flow:
+   - User fills registration form (Parallelogram)
+   - Form Validation (Rectangle)
+   - Decision: Form valid? (Diamond)
+     - Yes: Create User in users_db (Cylinder)
+     - No: Display error (Parallelogram) -> Register Form
+5. Login Flow:
+   - User enters credentials (Parallelogram)
+   - Form Validation (Rectangle)
+   - Decision: Valid credentials? (Diamond)
+     - Yes: Check User Role (Diamond)
+       - Admin: Admin Dashboard (Rectangle)
+       - User: User Dashboard (Rectangle)
+     - No: Display error (Parallelogram) -> Login Form
+6. User Dashboard (Rectangle)
+   - Browse Lost/Found Items (Rectangle)
+   - Post New Item (Rectangle)
+   - View Notifications (Rectangle)
+   - Update Profile (Rectangle)
+   - Logout (Rectangle)
+7. Post Item Flow:
+   - Post Item Form (Rectangle)
+   - User fills form (Parallelogram)
+   - Image Upload Process (Rectangle)
+   - Form Validation (Rectangle)
+   - Decision: Form valid? (Diamond)
+     - Yes: Add to posts table in user_db (Cylinder)
+     - No: Display error (Parallelogram) -> Post Item Form
+8. View Items Flow:
+   - View Items Page (Rectangle)
+   - Search Results (Rectangle)
+   - Item Details Page (Rectangle)
+   - Decision: User's own post? (Diamond)
+     - Yes: Edit/Delete Post (Rectangle)
+     - Update Status (Rectangle)
+9. Notification System:
+   - New Post Created (Rectangle)
+   - Generate Notification (Rectangle)
+   - Store in notifications table (Cylinder)
+   - Display Notification to User (Rectangle)
+10. Admin Dashboard (Rectangle)
+    - View Users (Rectangle)
+    - View All Posts (Rectangle)
+    - Delete Posts (Rectangle)
+    - View Statistics (Rectangle)
+    - Manage Platform (Rectangle)
+11. Logout (Rectangle)
+    - Session Ended (Oval)
+
+---
+ 

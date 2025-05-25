@@ -1,0 +1,160 @@
+# Lost and Found System Flow
+
+## System Overview
+The Lost and Found system is a web application that allows users to report lost items or found items, view items reported by others, and claim their lost items. The system has two main user roles: regular users and administrators.
+
+## Database Structure
+The system uses two separate databases:
+1. **users_db**: Contains user account information
+   - users table: Stores user credentials and profile information
+   
+2. **user_db**: Contains application data
+   - posts table: Stores lost and found item posts
+   - notifications table: Stores system notifications for users
+   - messages table: Stores messages between users
+
+## Flowchart Shapes
+The following standard flowchart shapes should be used in the diagram:
+
+1. **Ovals/Ellipses** - Start/End points
+   - "User Visits Website" (start)
+   - "Session Ended" (end)
+
+2. **Rectangles** - Processes/Activities
+   - Login/Register Page
+   - User Dashboard
+   - Admin Dashboard
+   - Post Item Form
+   - View Items Page
+   - Item Details Page
+   - Profile Page
+   - Notifications Page
+
+3. **Diamonds** - Decision Points
+   - "User has account?"
+   - "Valid credentials?"
+   - "User role?" (admin/user)
+   - "Item type?" (lost/found)
+   - "User's own post?"
+   - "Form valid?"
+
+4. **Cylinders** - Databases/Storage
+   - users_db (users table)
+   - user_db (posts table)
+   - user_db (notifications table)
+   - File storage (for images)
+
+5. **Arrows** - Flow Direction
+   - Solid lines for normal flow
+   - Dashed lines for optional/error paths
+
+6. **Parallelograms** - Input/Output
+   - User enters credentials
+   - User fills form data
+   - System displays items
+   - System shows notifications
+   - Display error messages
+
+7. **Document Shapes** - Reports/Documentation
+   - Item listings
+   - User profile
+
+## System Flow
+
+### 1. Authentication Flow
+1. **Entry Point**: User visits the website
+2. **Login/Register Page**: User is presented with login and registration options
+3. **Decision Point**: User has an account?
+   - **Yes**: Proceeds to login form
+   - **No**: Proceeds to registration form
+4. **Registration Process**:
+   - User fills out registration form with name, email, password
+   - System validates form data (checks for inappropriate words, email format)
+   - If valid, creates user account in users_db
+   - Redirects to login page with success message
+5. **Login Process**:
+   - User enters email and password
+   - System validates credentials against users_db
+   - If valid, creates session and checks user role
+   - Redirects to appropriate dashboard based on role
+
+### 2. User Dashboard Flow
+1. **User Dashboard**: After successful login, user is presented with the dashboard
+2. **Main Features**:
+   - View lost/found items
+   - Post new lost/found items
+   - View user profile
+   - Access notifications
+   - Send/receive messages
+   - Logout
+
+### 3. Post Item Flow
+1. **Post Item Form**: User fills out form with:
+   - Item type (lost/found)
+   - Title and description
+   - Location details (including map coordinates)
+   - Date and time
+   - Contact information
+   - Optional photo upload
+2. **Form Processing**:
+   - Validates form data
+   - Uploads photo if provided
+   - Saves post to posts table in user_db
+   - Creates relevant notifications for other users
+
+### 4. View Items Flow
+1. **View Items Page**: Displays list of lost/found items
+2. **Filtering Options**:
+   - By type (lost/found)
+   - By status (claimed/unclaimed)
+   - By date
+   - By location
+3. **Item Details**:
+   - User clicks on item to view details
+   - System displays comprehensive information about the item
+   - Options to contact owner or update status if own post
+
+### 5. Update Status Flow
+1. **Item Owner**: Can mark items as "claimed" or "unclaimed"
+2. **Status Update Process**:
+   - User selects new status
+   - System updates posts table
+   - System generates appropriate notifications
+
+### 6. Notification System
+1. **Notification Generation**:
+   - New posts create notifications for relevant users
+   - Status updates create notifications
+   - Messages create notifications
+2. **Notification Display**:
+   - Unread count shown on dashboard
+   - Notification page shows all user notifications
+   - Option to mark as read
+
+### 7. Admin Dashboard Flow
+1. **Admin Features**:
+   - View all users
+   - View all posts
+   - Delete inappropriate posts
+   - View system statistics
+   - Manage platform settings
+
+### 8. Logout Process
+1. **Logout**: User clicks logout
+2. **Session Management**:
+   - Destroys user session
+   - Redirects to login page
+
+## Security Features
+1. Password hashing
+2. Form validation
+3. Protection against inappropriate content
+4. Session management
+5. Role-based access control
+
+## Technical Implementation
+- PHP for backend processing
+- MySQL for database storage
+- JavaScript for client-side validation and interactivity
+- CSS for styling and responsive design
+- AJAX for asynchronous data loading 

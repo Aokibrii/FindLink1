@@ -1,0 +1,11 @@
+main {
+  margin-left: 70px;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  min-height: 100vh;
+  background-color: var(--background-light);
+}
+
+main.nav-expanded {
+  margin-left: 200px;
+}
