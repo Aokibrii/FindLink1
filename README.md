@@ -2,6 +2,42 @@
 
 FindLink is a web application designed to help users report and search for lost and found items, making it easier to reconnect people with their belongings.
 
+---
+
+## System Overview
+
+**1. System Name:**
+FindLink - Lost and Found Application
+
+**2. Purpose of the System (1–2 sentences):**
+FindLink helps users report lost or found items and search for belongings, streamlining the process of reconnecting people with their possessions. It provides a centralized platform for posting, searching, and managing lost and found cases.
+
+**3. Target Users:**
+
+- General public (students, staff, visitors, community members)
+- Administrators (system managers)
+
+**4. Core Functionalities:**
+
+- Allows users to register and log in
+- Enables users to post lost or found items with images and details
+- Provides search and browsing of posted items
+- Sends notifications for updates and matches
+- Supports user profile management
+- Offers admin dashboard for managing users and posts
+- Ensures secure authentication and session management
+
+**5. Expected Outcome:**
+Users can efficiently report, search, and recover lost or found items, resulting in higher chances of reuniting owners with their belongings. Administrators can manage the platform to ensure smooth operation and content moderation.
+
+**6. Scope Boundaries (Optional but Recommended):**
+
+- The system does not handle physical delivery or verification of items
+- No payment or transaction processing is included
+- Communication is limited to notifications and messages within the platform
+
+---
+
 ## Features
 
 - User registration and login
