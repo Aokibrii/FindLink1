@@ -1105,7 +1105,7 @@ try {
                     <p class="fs-5 mb-4">Are you sure you want to logout?</p>
                 </div>
                 <div class="modal-footer border-0 justify-content-center gap-3">
-                    <a href="../logout.php" class="btn btn-danger px-4">Logout</a>
+                    <a href="./logout.php" class="btn btn-danger px-4">Logout</a>
                     <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -1793,7 +1793,7 @@ try {
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content text-center">
                     <div class="modal-body py-5">
-                        <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                        <i class="fas fa-check-circle fa-4x text-success mb-3 animated-check"></i>
                         <h4 class="mb-2">Welcome, Admin!</h4>
                         <p class="mb-0">You have successfully logged in to the admin panel.</p>
                     </div>
@@ -1948,7 +1948,7 @@ try {
 
     <!-- Make sure Bootstrap JS is included -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/js.script"></script>
+    <script src="./js/js.script"></script>
 </body>
 
 </html>
