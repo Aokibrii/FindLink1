@@ -1,5 +1,36 @@
 @import "user_page.css";
 
+/* Global Styles */
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary-color: #818cf8;
+  --text-color: #1f2937;
+  --text-light: #4b5563;
+  --background-light: #ffffff;
+  --background-dark: #312e81;
+  --error-color: #dc2626;
+  --success-color: #059669;
+  --border-color: #e5e7eb;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 8px 24px -2px rgb(0 0 0 / 0.18);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.darkmode {
+  --background-light: #1f2937;
+  --background-dark: #111827;
+  --text-color: #f3f4f6;
+  --text-light: #d1d5db;
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary-color: #818cf8;
+  --border-color: #374151;
+  --shadow-sm: 0 1px 2px 0 rgb(255 255 255 / 0.05);
+  --shadow-md: 0 8px 24px -2px rgb(255 255 255 / 0.18);
+  --shadow-lg: 0 10px 15px -3px rgb(255 255 255 / 0.1);
+}
+
 body {
   background: #c7f0fd;
   min-height: 100vh;

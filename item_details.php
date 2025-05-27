@@ -188,12 +188,7 @@ $item = $result->fetch_assoc();
                     </a>
                 </li>
 
-                <li style="margin: 0;">
-                    <a href="notifications.php" class="side-nav-item">
-                        <i class="fa-solid fa-bell"></i>
-                        <span>Notifications</span>
-                    </a>
-                </li>
+
                 <li style="margin: 0;">
                     <a href="messages.php" class="side-nav-item">
                         <i class="fa-solid fa-envelope"></i>

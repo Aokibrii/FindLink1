@@ -512,12 +512,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <span>Home</span>
                     </a>
                 </li>
-                <li>
-                    <a href="notifications.php" class="side-nav-item">
-                        <i class="fa-solid fa-bell"></i>
-                        <span>Notifications</span>
-                    </a>
-                </li>
+
                 <li>
                     <a href="messages.php" class="side-nav-item">
                         <i class="fa-solid fa-envelope"></i>

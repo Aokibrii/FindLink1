@@ -1,16 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 :root {
-  --primary-color: #32a8cc;
-  --primary-hover: #248193;
-  --secondary-color: #41d2ff;
-  --text-color: #021b1d;
-  --text-light: #175868;
-  --background-light: #c7f0fd;
-  --background-dark: #083841;
-  --error-color: #ef4444;
-  --success-color: #22c55e;
-  --border-color: #c7f0fd;
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary-color: #818cf8;
+  --text-color: #1f2937;
+  --text-light: #4b5563;
+  --background-light: #eef2ff;
+  --background-dark: #312e81;
+  --error-color: #dc2626;
+  --success-color: #059669;
+  --border-color: #e5e7eb;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -67,9 +67,9 @@ body::before {
   width: 100%;
   max-width: 520px;
   padding: 2.5rem;
-  background: rgba(235, 235, 235, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 1.25rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   backdrop-filter: blur(10px);
   display: none;
   opacity: 0;
@@ -88,7 +88,7 @@ body::before {
 }
 
 .form-box h2 {
-  color: #248193;
+  color: var(--primary-color);
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1.75rem;
@@ -99,13 +99,13 @@ body::before {
 .form-box select {
   width: 100%;
   background: rgba(255, 255, 255, 0.8);
-  border: none;
+  border: 1px solid var(--border-color);
   padding: 0.875rem 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   font-size: 1rem;
-  color: #333;
+  color: var(--text-color);
   box-sizing: border-box;
 }
 
@@ -113,12 +113,12 @@ body::before {
 .form-box select:focus {
   outline: none;
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 2px var(--secondary-color);
 }
 
 .form-box button[type="submit"] {
   width: 100%;
-  background: #32a8cc;
+  background: var(--primary-color);
   color: white;
   padding: 0.875rem;
   border-radius: 0.5rem;
@@ -131,35 +131,36 @@ body::before {
 }
 
 .form-box button[type="submit"]:hover {
-  background: #248193;
+  background: var(--primary-hover);
 }
 
 .form-box p {
   text-align: center;
   margin-top: 1rem;
   font-size: 0.95rem;
-  color: #175868;
+  color: var(--text-light);
 }
 
 .form-box p a {
-  color: #32a8cc;
+  color: var(--primary-color);
   font-weight: 600;
   text-decoration: none;
 }
 
 .form-box p a:hover {
+  color: var(--primary-hover);
   text-decoration: underline;
 }
 
 .error-message {
   padding: 0.875rem 1rem;
-  background: #ef4444;
+  background: var(--error-color);
   border-radius: 0.5rem;
   font-size: 0.875rem;
   color: white;
   text-align: center;
   margin-bottom: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .success-message {
@@ -288,10 +289,10 @@ body::before {
 
 /* Welcome Message Styles */
 .welcome-message {
-  background: rgba(235, 235, 235, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 1.25rem;
   padding: 2.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   backdrop-filter: blur(10px);
   border: none;
   max-width: 800px;
@@ -300,7 +301,7 @@ body::before {
 }
 
 .welcome-message h1 {
-  color: #32a8cc;
+  color: var(--primary-color);
   font-size: 2.2rem;
   margin-bottom: 1.2rem;
   font-weight: 700;
@@ -309,7 +310,7 @@ body::before {
 .welcome-message p {
   font-size: 1.1rem;
   margin-bottom: 1rem;
-  color: #175868;
+  color: var(--text-light);
 }
 
 .welcome-buttons {
@@ -323,7 +324,7 @@ body::before {
   display: inline-block;
   padding: 0.85rem 2.5rem;
   font-size: 1.1rem;
-  background: #32a8cc;
+  background: var(--primary-color);
   color: white;
   border-radius: 0.5rem;
   border: none;
@@ -333,20 +334,20 @@ body::before {
 }
 
 .welcome-message .btn:hover {
-  background: #248193;
+  background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .welcome-message .btn-outline-primary {
   background: transparent;
-  border: 2px solid #32a8cc;
-  color: #32a8cc;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
 }
 
 .welcome-message .btn-outline-primary:hover {
-  background: rgba(50, 168, 204, 0.1);
-  color: #248193;
+  background: var(--background-light);
+  color: var(--primary-hover);
 }
 
 @keyframes fadeIn {

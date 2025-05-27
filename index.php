@@ -2,9 +2,25 @@
 
 session_start();
 
+// Prevent caching of the login page
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 // Redirect if user is already logged in
 if (isset($_SESSION['email'])) {
-  header("Location: user_page.php");
+  // If user is admin, redirect to admin page
+  if ($_SESSION['email'] === 'admin@gmail.com') {
+    header("Location: admin/admin_page.php");
+  } else {
+    header("Location: user_page.php");
+  }
+  exit();
+}
+
+// Prevent direct access to login form via URL parameters
+if (isset($_GET['show']) && $_GET['show'] === 'login') {
+  header("Location: index.php");
   exit();
 }
 
@@ -100,6 +116,13 @@ function isActiveForm($formName, $activeForm)
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="js/script.js"></script>
   <script>
+    // Prevent browser back button from showing login page after logout
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+
     // Show appropriate form if there are errors or success message
     <?php if (!empty($errors['login']) || !empty($errors['register']) || !empty($successMessage)): ?>
       document.addEventListener('DOMContentLoaded', function() {

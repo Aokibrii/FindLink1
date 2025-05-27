@@ -90,7 +90,7 @@ try {
             height: 100vh;
             background-color: #ffffff;
             z-index: 1002;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
             transition: width 0.3s ease;
             overflow-y: auto;
             border-right: 1px solid #e3e6f0;
@@ -142,7 +142,7 @@ try {
             font-size: 20px;
             width: 40px;
             text-align: center;
-            color: #5a5c69;
+            color: #a0aec0;
         }
 
         .sidebar a span {
@@ -157,7 +157,7 @@ try {
 
         /* Active state for sidebar links */
         .sidebar a.active {
-            background-color: #4e73df;
+            background-color: #3b82f6;
             color: white;
         }
 
@@ -171,6 +171,7 @@ try {
             margin-left: 70px;
             padding: 20px;
             transition: margin-left 0.3s ease;
+            background-color: #f8fafc;
         }
 
         .main-content.expanded {
@@ -181,117 +182,188 @@ try {
         .welcome-section {
             padding: 20px;
             text-align: center;
+            color: #2d3748;
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar {
-            background-color: #343a40;
-            padding: 1rem;
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar-brand {
-            color: white !important;
-            font-weight: bold;
+        /* Dashboard Statistics Cards */
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .nav-link {
-            color: rgba(255, 255, 255, .8) !important;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .nav-link:hover {
-            color: white !important;
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
 
-        .admin-panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .admin-panel-header h2 {
-            margin: 0;
-        }
-
-        .admin-panel-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .date-time-column {
-            display: inline-flex;
-            align-items: center;
-            color: #4a5568;
-            font-size: 0.95rem;
-        }
-
-        .date-time-column i {
-            color: #3a86ff;
-        }
-
-        .date-time-display {
-            display: inline-flex;
-            align-items: center;
-            background-color: rgba(58, 134, 255, 0.1);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .location-display {
-            display: inline-flex;
-            align-items: center;
-            background-color: rgba(244, 67, 54, 0.1);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .contact-display {
-            display: inline-flex;
-            align-items: center;
-            background-color: rgba(76, 175, 80, 0.1);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .user-info {
-            display: inline-flex;
-            align-items: center;
-            font-weight: 500;
-        }
-
-        .user-email {
-            font-weight: normal;
-            color: #6c757d;
-            font-size: 0.9em;
-        }
-
-        .item-title {
+        .stat-card .count {
+            font-size: 2rem;
             font-weight: 600;
             color: #2d3748;
-            font-size: 1.05em;
+            margin-bottom: 5px;
         }
 
-        .info-grid {
-            display: grid;
-            grid-gap: 1rem;
-            margin-bottom: 1rem;
+        .stat-card .label {
+            color: #6c757d;
+            font-size: 1rem;
         }
 
-        .info-item {
-            margin-bottom: 0.5rem;
+        /* Table Improvements */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
         }
 
-        .post-meta {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            padding-bottom: 1rem;
+        .table {
+            margin-bottom: 0;
         }
 
-        /* Improve table row appearance */
+        .table thead th {
+            background-color: #f8fafc;
+            color: #2d3748;
+            font-weight: 600;
+            padding: 15px;
+            border-bottom: 2px solid #e3e6f0;
+        }
+
         .table tbody td {
-            padding: 1.25rem 1rem;
+            padding: 15px;
             vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.875rem;
+        }
+
+        .btn i {
+            margin-right: 5px;
+        }
+
+        /* Status Badges */
+        .badge {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .badge.bg-success {
+            background-color: #1cc88a !important;
+        }
+
+        .badge.bg-warning {
+            background-color: #f6c23e !important;
+        }
+
+        .badge.bg-secondary {
+            background-color: #858796 !important;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-filter-section .form-control {
+            border-radius: 6px;
+            border: 1px solid #e3e6f0;
+            padding: 10px 15px;
+        }
+
+        .search-filter-section .form-control:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+
+        /* Modal Improvements */
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e3e6f0;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            background-color: #f8fafc;
+            border-top: 1px solid #e3e6f0;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Responsive Improvements */
+        @media (max-width: 768px) {
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+
+            .stat-card {
+                margin-bottom: 15px;
+            }
+
+            .table-container {
+                padding: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
         }
 
         /* Toggle button for sidebar */
@@ -301,7 +373,7 @@ try {
             left: 20px;
             width: 40px;
             height: 40px;
-            background-color: #4e73df;
+            background-color: #3b82f6;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -310,6 +382,10 @@ try {
             cursor: pointer;
             z-index: 1003;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-toggle:hover {
+            background-color: #2563eb;
         }
 
         /* Add this to your existing styles section */
