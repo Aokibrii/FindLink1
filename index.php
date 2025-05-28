@@ -62,7 +62,7 @@ function isActiveForm($formName, $activeForm)
 <body>
   <div class="container">
     <div class="welcome-message text-center">
-      <h1>Welcome to FindLink</h1>
+      <h1>FindLink</h1>
       <p>Lost something? Found something? Let's reconnect people with their precious belongings.</p>
       <p>Please create an account to get started or login if you already have one.</p>
       <div class="welcome-buttons">
