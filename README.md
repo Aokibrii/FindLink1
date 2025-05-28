@@ -22,7 +22,7 @@ FindLink helps users report lost or found items and search for belongings, strea
 - Allows users to register and log in
 - Enables users to post lost or found items with images and details
 - Provides search and browsing of posted items
-- Sends notifications for updates and matches
+- Sends messages and notify the user
 - Supports user profile management
 - Offers admin dashboard for managing users and posts
 - Ensures secure authentication and session management
