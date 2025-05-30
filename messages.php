@@ -80,7 +80,7 @@ $unread_count = $unread_result->fetch_assoc()['unread_count'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages - Lost and Found</title>
+    <title>Messages - Findlink</title>
     <link rel="icon" href="images/Icon.jpg">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">

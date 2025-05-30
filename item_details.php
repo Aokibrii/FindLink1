@@ -55,7 +55,7 @@ $item = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($item['item_name']) ?> | Lost and Found</title>
+    <title><?= htmlspecialchars($item['item_name']) ?> | Findlink</title>
     <link rel="icon" href="images/Icon.jpg">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">

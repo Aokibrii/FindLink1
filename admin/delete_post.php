@@ -1,19 +1,22 @@
 <?php
 // Start session to check if user is logged in
 session_start();
+header('Content-Type: application/json');
 
-// Initialize response array
-$response = array();
-
-// Check if ID is provided
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    $response['success'] = false;
-    $response['message'] = 'Post ID is required';
-    echo json_encode($response);
+// Check if user is logged in
+if (!isset($_SESSION['email'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
     exit;
 }
 
-// Sanitize the ID
+// Check if ID is provided
+if (!isset($_GET['id'])) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Post ID is required']);
+    exit;
+}
+
 $post_id = intval($_GET['id']);
 
 // Database connection parameters
@@ -36,33 +39,33 @@ try {
     $stmt->execute([$post_id]);
     $post = $stmt->fetch();
 
-    if ($post && !empty($post['photo_path'])) {
-        // Construct the full path to the photo
-        $fullPath = '../' . $post['photo_path'];
+    if (!$post) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'Post not found']);
+        exit;
+    }
 
-        // Delete the photo file if it exists
-        if (file_exists($fullPath)) {
-            unlink($fullPath);
+    // Delete the photo file if it exists
+    if (!empty($post['photo_path'])) {
+        $full_path = '../' . $post['photo_path'];
+        if (file_exists($full_path)) {
+            unlink($full_path);
         }
     }
 
-    // Now delete the post
+    // Delete the post from database
     $stmt = $pdo->prepare("DELETE FROM posts WHERE id = ?");
-    $stmt->execute([$post_id]);
+    $success = $stmt->execute([$post_id]);
 
-    // Check if the deletion was successful
-    if ($stmt->rowCount() > 0) {
-        $response['success'] = true;
-        $response['message'] = 'Post deleted successfully';
+    if ($success && $stmt->rowCount() > 0) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Post deleted successfully!'
+        ]);
     } else {
-        $response['success'] = false;
-        $response['message'] = 'Post not found or already deleted';
+        echo json_encode(['success' => false, 'message' => 'Failed to delete post']);
     }
-
-    echo json_encode($response);
 } catch (PDOException $e) {
-    $response['success'] = false;
-    $response['message'] = 'Database error: ' . $e->getMessage();
-    error_log("Database error in delete_post.php: " . $e->getMessage());
-    echo json_encode($response);
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
 }

@@ -66,7 +66,7 @@ if (isset($_GET['ajax_search']) && isset($_GET['q'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lost and Found</title>
+    <title>FindLink - Home</title>
     <link rel="icon" href="images/Icon.jpg">
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">

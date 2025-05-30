@@ -1,30 +1,28 @@
 <?php
 // Start session to check if user is logged in
 session_start();
+header('Content-Type: application/json');
+
+// Check if user is logged in
 if (!isset($_SESSION['email'])) {
-    // Return JSON error if not logged in
+    http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
     exit;
 }
 
-// Only respond to POST requests
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
-    exit;
-}
-
-// Check if required data is provided
+// Check if required parameters are provided
 if (!isset($_POST['post_id']) || !isset($_POST['status'])) {
+    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Missing required parameters']);
     exit;
 }
 
-// Sanitize inputs
 $post_id = intval($_POST['post_id']);
-$status = strtolower(trim($_POST['status']));
+$status = $_POST['status'];
 
-// Validate status value
-if ($status !== 'claimed' && $status !== 'unclaimed') {
+// Validate status
+if (!in_array($status, ['claimed', 'unclaimed'])) {
+    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Invalid status value']);
     exit;
 }
@@ -55,32 +53,28 @@ try {
     }
 
     // Check if status column exists
-    $tableInfo = $pdo->query("SHOW COLUMNS FROM posts LIKE 'status'");
-    $statusColumnExists = $tableInfo->rowCount() > 0;
+    $statusColumnExists = $pdo->query("SHOW COLUMNS FROM posts LIKE 'status'")->rowCount() > 0;
 
     if (!$statusColumnExists) {
         // Add status column if it doesn't exist
-        try {
-            $pdo->exec("ALTER TABLE posts ADD COLUMN status VARCHAR(20) DEFAULT 'unclaimed'");
-            $statusColumnExists = true;
-        } catch (PDOException $e) {
-            error_log("Error adding status column: " . $e->getMessage());
-            echo json_encode(['success' => false, 'message' => 'Could not add status column']);
-            exit;
-        }
+        $pdo->exec("ALTER TABLE posts ADD COLUMN status VARCHAR(20) DEFAULT 'unclaimed'");
     }
 
     // Update the post status
     $stmt = $pdo->prepare("UPDATE posts SET status = ?, updated_at = NOW() WHERE id = ?");
-    $result = $stmt->execute([$status, $post_id]);
+    $success = $stmt->execute([$status, $post_id]);
 
-    if ($result) {
-        $actionText = $status === 'claimed' ? 'claimed' : 'marked as unclaimed';
-        echo json_encode(['success' => true, 'message' => "Item successfully $actionText"]);
+    if ($success && $stmt->rowCount() > 0) {
+        $message = $status === 'claimed' ? 'Item marked as claimed successfully!' : 'Item marked as unclaimed successfully!';
+        echo json_encode([
+            'success' => true,
+            'message' => $message,
+            'new_status' => $status
+        ]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Error updating item status']);
+        echo json_encode(['success' => false, 'message' => 'Post not found or no changes made']);
     }
 } catch (PDOException $e) {
-    error_log("Database error in update_status.php: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Database error occurred']);
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
 }
