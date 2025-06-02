@@ -704,6 +704,39 @@ try {
                 width: 100%;
             }
         }
+
+        /* Toast Notification Styles */
+        .toast {
+            min-width: 300px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast-header {
+            background-color: rgba(248, 249, 250, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        .toast.border-success .toast-header {
+            background-color: rgba(212, 237, 218, 0.95);
+        }
+
+        .toast.border-danger .toast-header {
+            background-color: rgba(248, 215, 218, 0.95);
+        }
+
+        .toast.border-warning .toast-header {
+            background-color: rgba(255, 243, 205, 0.95);
+        }
+
+        .toast.border-primary .toast-header {
+            background-color: rgba(207, 226, 255, 0.95);
+        }
+
+        @media (max-width: 576px) {
+            .toast {
+                min-width: 250px;
+            }
+        }
     </style>
     <!-- Add this script to prevent back button navigation -->
     <script type="text/javascript">
@@ -729,7 +762,6 @@ try {
         </div>
         <ul>
             <li><a href="#" id="dashboard-link" class="active"><i class="fas fa-chart-bar"></i><span>Dashboard</span></a></li>
-            <li><a href="#" id="view-items-link"><i class="fas fa-box-open"></i><span>View Items</span></a></li>
             <li><a href="#" id="manage-posts-link"><i class="fas fa-thumbtack"></i><span>Manage Posts</span></a></li>
             <li><a href="#" id="manage-users-link"><i class="fas fa-users-cog"></i><span>Manage Users</span></a></li>
             <li><a href="./logout.php" id="logout-link"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
@@ -776,88 +808,6 @@ try {
                         <div class="count"><?php echo $unclaimedItems; ?></div>
                         <div class="label">Unclaimed Items</div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- View Items Section (hidden by default) -->
-        <section id="viewItemsSection" class="mb-4 d-none">
-            <div class="card">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-box-open me-2"></i>View All Items</h5>
-                    <button class="btn btn-sm btn-light" onclick="closeSection('viewItemsSection')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="card-body">
-                    <?php
-                    try {
-                        if ($is_admin) {
-                            // Admin sees all posts
-                            $stmt = $pdo->query("SELECT * FROM posts ORDER BY created_at DESC");
-                        } else {
-                            // User sees only their posts
-                            $stmt = $pdo->prepare("SELECT * FROM posts WHERE user_email = ? ORDER BY created_at DESC");
-                            $stmt->execute([$user_email]);
-                        }
-                        $posts = $stmt->fetchAll();
-
-                        if (count($posts) > 0) {
-                            echo "<div class='table-container'>";
-                            echo "<table class='table table-bordered table-hover'>
-                                <thead class='table-dark'>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>User</th>
-                                        <th>Title</th>
-                                        <th>Photo</th>
-                                        <th>Location</th>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Status</th>
-                                        <th>Contact</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>";
-
-                            foreach ($posts as $post) {
-                                $statusClass = isset($post['status']) && $post['status'] === 'claimed' ? 'success' : 'warning';
-                                $statusText = isset($post['status']) && $post['status'] === 'claimed' ? 'Claimed' : 'Unclaimed';
-                                $typeText = ucfirst($post['type'] ?? 'unknown');
-
-                                echo "<tr data-post-id='{$post['id']}'>
-                                    <td>{$post['id']}</td>
-                                    <td><span class='user-info'><i class='fas fa-user text-info me-2'></i>{$post['user_email']}</span></td>
-                                    <td><span class='item-title'>{$post['title']}</span></td>
-                                    <td><img src='../{$post['photo_path']}' alt='Post Photo' class='img-thumbnail' style='max-width: 100px;'></td>
-                                    <td><i class='fas fa-map-marker-alt text-danger me-2'></i>{$post['location']}</td>
-                                    <td><span class='date-time-column'><i class='far fa-calendar-alt me-1'></i> {$post['date']} <i class='far fa-clock ms-2 me-1'></i> {$post['time']}</span></td>
-                                    <td><span class='badge bg-secondary'>{$typeText}</span></td>
-                                    <td><span class='badge bg-{$statusClass}'>{$statusText}</span></td>
-                                    <td><i class='fas fa-phone-alt text-success me-2'></i>{$post['contact_info']}</td>
-                                    <td>
-                                        <div class='d-flex flex-column gap-2'>
-                                            <button class='btn btn-sm btn-danger' onclick='deletePost({$post['id']})'>Delete</button>
-                                            <button class='btn btn-sm " . ($post['status'] == 'claimed' ? 'btn-outline-warning' : 'btn-outline-success') . "' 
-                                                    onclick='updateItemStatus({$post['id']}, \"" . ($post['status'] == 'claimed' ? 'unclaimed' : 'claimed') . "\")'>
-                                                <i class='fas fa-" . ($post['status'] == 'claimed' ? 'times-circle' : 'check-circle') . " me-1'></i>
-                                                " . ($post['status'] == 'claimed' ? 'Mark Unclaimed' : 'Mark Claimed') . "
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>";
-                            }
-
-                            echo "</tbody></table>";
-                            echo "</div>";
-                        } else {
-                            echo "<div class='alert alert-info'>No items found.</div>";
-                        }
-                    } catch (PDOException $e) {
-                        echo "<div class='alert alert-danger'>Error loading items: " . htmlspecialchars($e->getMessage()) . "</div>";
-                    }
-                    ?>
                 </div>
             </div>
         </section>
@@ -1060,8 +1010,19 @@ try {
 
                                 echo "<td><i class='fas fa-phone-alt text-success me-2'></i>{$post['contact_info']}</td>
                                 <td>
-                                    <button class='btn btn-sm btn-warning mb-1' onclick='editPost({$post['id']})'>Edit</button>
-                                    <button class='btn btn-sm btn-danger' onclick='deletePost({$post['id']})'>Delete</button>
+                                    <div class='d-flex flex-column gap-1'>
+                                        <button class='btn btn-sm btn-warning' onclick='editPost({$post['id']})'>
+                                            <i class='fas fa-edit me-1'></i>Edit
+                                        </button>
+                                        <button class='btn btn-sm btn-danger' onclick='deletePost({$post['id']})'>
+                                            <i class='fas fa-trash me-1'></i>Delete
+                                        </button>
+                                        <button class='btn btn-sm " . ($post['status'] == 'claimed' ? 'btn-outline-warning' : 'btn-outline-success') . "' 
+                                                onclick='updateItemStatus({$post['id']}, \"" . ($post['status'] == 'claimed' ? 'unclaimed' : 'claimed') . "\")'>
+                                            <i class='fas fa-" . ($post['status'] == 'claimed' ? 'times-circle' : 'check-circle') . " me-1'></i>
+                                            " . ($post['status'] == 'claimed' ? 'Mark Unclaimed' : 'Mark Claimed') . "
+                                        </button>
+                                    </div>
                                 </td>
                               </tr>";
                             }
@@ -1180,7 +1141,7 @@ try {
                             <h5>Edit User</h5>
                         </div>
                         <div class="card-body">
-                            <form method="post">
+                            <form id="editUserFormElement" onsubmit="return submitUserEdit(event)">
                                 <input type="hidden" name="user_id" id="edit_user_id">
                                 <div class="mb-3">
                                     <label for="edit_name" class="form-label">Name</label>
@@ -1191,8 +1152,12 @@ try {
                                     <input type="email" name="edit_email" id="edit_email" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
-                                    <button type="submit" name="edit_user" class="btn btn-success">Update User</button>
-                                    <button type="button" class="btn btn-secondary" onclick="hideEditUserForm()">Cancel</button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save me-1"></i>Update User
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="hideEditUserForm()">
+                                        <i class="fas fa-times me-1"></i>Cancel
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -1203,20 +1168,6 @@ try {
                     if ($conn->connect_error) {
                         echo "<div class='alert alert-danger'>Connection failed: " . $conn->connect_error . "</div>";
                     } else {
-                        // Handle user deletion
-                        if (isset($_GET['delete_user'])) {
-                            $delete_id = intval($_GET['delete_user']);
-                            $conn->query("DELETE FROM users WHERE id=$delete_id");
-                            echo "<div class='alert alert-success'>User deleted successfully!</div>";
-                        }
-                        // Handle user update
-                        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
-                            $edit_id = intval($_POST['user_id']);
-                            $edit_name = $conn->real_escape_string($_POST['edit_name']);
-                            $edit_email = $conn->real_escape_string($_POST['edit_email']);
-                            $conn->query("UPDATE users SET name='$edit_name', email='$edit_email' WHERE id=$edit_id");
-                            echo "<div class='alert alert-success'>User updated successfully!</div>";
-                        }
                         // Fetch users
                         $result = $conn->query("SELECT id, name, email FROM users");
                         echo "<div class='table-container'>";
@@ -1224,19 +1175,25 @@ try {
                         while ($row = $result->fetch_assoc()) {
                             $is_admin = ($row['email'] === 'admin@gmail.com');
 
-                            echo "<tr>
+                            echo "<tr data-user-id='{$row['id']}'>
                                 <td>{$row['id']}</td>
                                 <td>{$row['name']}</td>
                                 <td>{$row['email']}</td>
                                 <td>
-                                    <button class='btn btn-sm btn-warning' onclick='editUser({$row['id']}, \"{$row['name']}\", \"{$row['email']}\")'>Edit</button>";
+                                    <div class='d-flex gap-1'>
+                                        <button class='btn btn-sm btn-warning' onclick='editUser({$row['id']}, \"{$row['name']}\", \"{$row['email']}\")'>
+                                            <i class='fas fa-edit me-1'></i>Edit
+                                        </button>";
 
                             // Only show delete button if not admin
                             if (!$is_admin) {
-                                echo " <a href='?delete_user={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Delete this user?\")'>Delete</a>";
+                                echo " <button class='btn btn-sm btn-danger' onclick='deleteUser({$row['id']})'>
+                                        <i class='fas fa-trash me-1'></i>Delete
+                                       </button>";
                             }
 
-                            echo "</td>
+                            echo "    </div>
+                                </td>
                             </tr>";
                         }
                         echo "</tbody></table>";
@@ -1353,24 +1310,6 @@ try {
                 });
             });
 
-            // View Items link
-            document.getElementById('view-items-link').addEventListener('click', function(e) {
-                e.preventDefault();
-                setActiveMenuItem(this);
-
-                // Hide dashboard statistics section
-                document.getElementById('dashboardStatisticsSection').classList.add('d-none');
-
-                // Hide manage posts section if visible
-                document.getElementById('managePostsSection').classList.add('d-none');
-
-                // Hide manage users section if visible
-                document.getElementById('manageUsersSection').classList.add('d-none');
-
-                // Show view items section
-                showSection('viewItemsSection');
-            });
-
             // Manage Posts link
             document.getElementById('manage-posts-link').addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1378,9 +1317,6 @@ try {
 
                 // Hide dashboard statistics section
                 document.getElementById('dashboardStatisticsSection').classList.add('d-none');
-
-                // Hide view items section if visible
-                document.getElementById('viewItemsSection').classList.add('d-none');
 
                 // Hide manage users section if visible
                 document.getElementById('manageUsersSection').classList.add('d-none');
@@ -1397,9 +1333,6 @@ try {
                 // Hide dashboard statistics section
                 document.getElementById('dashboardStatisticsSection').classList.add('d-none');
 
-                // Hide view items section if visible
-                document.getElementById('viewItemsSection').classList.add('d-none');
-
                 // Hide manage posts section if visible
                 document.getElementById('managePostsSection').classList.add('d-none');
 
@@ -1414,9 +1347,6 @@ try {
 
                 // Show dashboard statistics
                 document.getElementById('dashboardStatisticsSection').classList.remove('d-none');
-
-                // Hide view items section
-                document.getElementById('viewItemsSection').classList.add('d-none');
 
                 // Hide manage posts section
                 document.getElementById('managePostsSection').classList.add('d-none');
@@ -1655,8 +1585,19 @@ try {
 
                                 echo "<td><i class='fas fa-phone-alt text-success me-2'></i>{$post['contact_info']}</td>
                                 <td>
-                                    <button class='btn btn-sm btn-warning mb-1' onclick='editPost({$post['id']})'>Edit</button>
-                                    <button class='btn btn-sm btn-danger' onclick='deletePost({$post['id']})'>Delete</button>
+                                    <div class='d-flex flex-column gap-1'>
+                                        <button class='btn btn-sm btn-warning' onclick='editPost({$post['id']})'>
+                                            <i class='fas fa-edit me-1'></i>Edit
+                                        </button>
+                                        <button class='btn btn-sm btn-danger' onclick='deletePost({$post['id']})'>
+                                            <i class='fas fa-trash me-1'></i>Delete
+                                        </button>
+                                        <button class='btn btn-sm " . ($post['status'] == 'claimed' ? 'btn-outline-warning' : 'btn-outline-success') . "' 
+                                                onclick='updateItemStatus({$post['id']}, \"" . ($post['status'] == 'claimed' ? 'unclaimed' : 'claimed') . "\")'>
+                                            <i class='fas fa-" . ($post['status'] == 'claimed' ? 'times-circle' : 'check-circle') . " me-1'></i>
+                                            " . ($post['status'] == 'claimed' ? 'Mark Unclaimed' : 'Mark Claimed') . "
+                                        </button>
+                                    </div>
                                 </td>
                               </tr>";
                             }
@@ -1790,7 +1731,7 @@ try {
                         <h5>Edit User</h5>
                     </div>
                     <div class="card-body">
-                        <form method="post">
+                        <form id="editUserFormElement" onsubmit="return submitUserEdit(event)">
                             <input type="hidden" name="user_id" id="edit_user_id">
                             <div class="mb-3">
                                 <label for="edit_name" class="form-label">Name</label>
@@ -1801,8 +1742,12 @@ try {
                                 <input type="email" name="edit_email" id="edit_email" class="form-control" required>
                             </div>
                             <div class="mb-3">
-                                <button type="submit" name="edit_user" class="btn btn-success">Update User</button>
-                                <button type="button" class="btn btn-secondary" onclick="hideEditUserForm()">Cancel</button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-1"></i>Update User
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="hideEditUserForm()">
+                                    <i class="fas fa-times me-1"></i>Cancel
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -1814,18 +1759,6 @@ try {
                     if ($conn->connect_error) {
                         echo "<div class='alert alert-danger'>Connection failed: " . $conn->connect_error . "</div>";
                     } else {
-                        // Handle user deletion
-                        if (isset($_GET['delete_user'])) {
-                            $delete_id = intval($_GET['delete_user']);
-                            $conn->query("DELETE FROM users WHERE id=$delete_id");
-                        }
-                        // Handle user update
-                        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_user'])) {
-                            $edit_id = intval($_POST['user_id']);
-                            $edit_name = $conn->real_escape_string($_POST['edit_name']);
-                            $edit_email = $conn->real_escape_string($_POST['edit_email']);
-                            $conn->query("UPDATE users SET name='$edit_name', email='$edit_email' WHERE id=$edit_id");
-                        }
                         // Fetch users
                         $result = $conn->query("SELECT id, name, email FROM users");
                         echo "<div class='table-container'>";
@@ -1833,19 +1766,25 @@ try {
                         while ($row = $result->fetch_assoc()) {
                             $is_admin = ($row['email'] === 'admin@gmail.com');
 
-                            echo "<tr>
+                            echo "<tr data-user-id='{$row['id']}'>
                                 <td>{$row['id']}</td>
                                 <td>{$row['name']}</td>
                                 <td>{$row['email']}</td>
                                 <td>
-                                    <button class='btn btn-sm btn-warning' onclick='editUser({$row['id']}, \"{$row['name']}\", \"{$row['email']}\")'>Edit</button>";
+                                    <div class='d-flex gap-1'>
+                                        <button class='btn btn-sm btn-warning' onclick='editUser({$row['id']}, \"{$row['name']}\", \"{$row['email']}\")'>
+                                            <i class='fas fa-edit me-1'></i>Edit
+                                        </button>";
 
                             // Only show delete button if not admin
                             if (!$is_admin) {
-                                echo " <a href='?delete_user={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Delete this user?\")'>Delete</a>";
+                                echo " <button class='btn btn-sm btn-danger' onclick='deleteUser({$row['id']})'>
+                                        <i class='fas fa-trash me-1'></i>Delete
+                                       </button>";
                             }
 
-                            echo "</td>
+                            echo "    </div>
+                                </td>
                             </tr>";
                         }
                         echo "</tbody></table>";
@@ -1903,7 +1842,7 @@ try {
                                 })
                                 .catch(error => {
                                     console.error('Error fetching post data:', error);
-                                    alert('Error loading post data. Please try again.');
+                                    showNotification('Error loading post data. Please try again.', 'error');
                                     hideEditForm();
                                 });
                         }
@@ -1934,16 +1873,18 @@ try {
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.success) {
-                                        alert(data.message);
+                                        showNotification(data.message, 'success', 3000);
                                         // Reload the page to show updated stats
-                                        location.reload();
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 1500);
                                     } else {
-                                        alert('Error: ' + data.message);
+                                        showNotification('Error: ' + data.message, 'error');
                                     }
                                 })
                                 .catch(error => {
                                     console.error('Error updating status:', error);
-                                    alert('An error occurred while updating the status');
+                                    showNotification('An error occurred while updating the status', 'error');
                                 });
                         }
 
@@ -2073,14 +2014,81 @@ try {
                             document.getElementById('editUserForm').classList.add('d-none');
                         }
 
-                        // Make sure Bootstrap is properly initialized
-                        document.addEventListener('DOMContentLoaded', function() {
-                            // Initialize all modals
-                            var modals = document.querySelectorAll('.modal');
-                            modals.forEach(function(modal) {
-                                new bootstrap.Modal(modal);
-                            });
-                        });
+                        // Add new user management functions
+                        function deleteUser(id) {
+                            if (!confirm('Are you sure you want to delete this user?')) {
+                                return;
+                            }
+
+                            // Send delete request
+                            fetch(`delete_user.php?id=${id}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Remove the row from the table
+                                        const row = document.querySelector(`tr[data-user-id="${id}"]`);
+                                        if (row) {
+                                            row.remove();
+                                        }
+
+                                        // Update dashboard statistics
+                                        updateDashboardStats();
+
+                                        // Show success message
+                                        showNotification(data.message, 'success', 3000);
+                                    } else {
+                                        showNotification('Error: ' + data.message, 'error');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error deleting user:', error);
+                                    showNotification('An error occurred while deleting the user', 'error');
+                                });
+                        }
+
+                        function submitUserEdit(event) {
+                            event.preventDefault();
+
+                            const formData = new FormData();
+                            formData.append('user_id', document.getElementById('edit_user_id').value);
+                            formData.append('name', document.getElementById('edit_name').value);
+                            formData.append('email', document.getElementById('edit_email').value);
+
+                            // Send update request
+                            fetch('update_user.php', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showNotification(data.message, 'success', 3000);
+
+                                        // Update the table row with new data
+                                        const userId = document.getElementById('edit_user_id').value;
+                                        const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+                                        if (row) {
+                                            const cells = row.querySelectorAll('td');
+                                            cells[1].textContent = document.getElementById('edit_name').value; // Name column
+                                            cells[2].textContent = document.getElementById('edit_email').value; // Email column
+                                        }
+
+                                        // Hide the edit form
+                                        hideEditUserForm();
+
+                                        // Update dashboard statistics
+                                        updateDashboardStats();
+                                    } else {
+                                        showNotification('Error: ' + data.message, 'error');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error updating user:', error);
+                                    showNotification('An error occurred while updating the user', 'error');
+                                });
+
+                            return false;
+                        }
 
                         // Add this new function for handling post deletion
                         function deletePost(id) {
@@ -2103,14 +2111,14 @@ try {
                                         updateDashboardStats();
 
                                         // Show success message
-                                        alert('Post deleted successfully!');
+                                        showNotification('Post deleted successfully!', 'success', 3000);
                                     } else {
-                                        alert('Error: ' + data.message);
+                                        showNotification('Error: ' + data.message, 'error');
                                     }
                                 })
                                 .catch(error => {
                                     console.error('Error deleting post:', error);
-                                    alert('An error occurred while deleting the post');
+                                    showNotification('An error occurred while deleting the post', 'error');
                                 });
                         }
 
@@ -2297,6 +2305,61 @@ try {
     <!-- Make sure Bootstrap JS is included -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/js.script"></script>
+
+    <!-- Toast Container for Notifications -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1060;">
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i id="toastIcon" class="fas fa-info-circle text-primary me-2"></i>
+                <strong id="toastTitle" class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="toastBody" class="toast-body">
+                <!-- Message will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toast notification function
+        function showNotification(message, type = 'info', duration = 4000) {
+            const toast = document.getElementById('notificationToast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastBody = document.getElementById('toastBody');
+
+            // Set icon and title based on type
+            switch (type) {
+                case 'success':
+                    toastIcon.className = 'fas fa-check-circle text-success me-2';
+                    toastTitle.textContent = 'Success';
+                    toast.className = 'toast border-success';
+                    break;
+                case 'error':
+                    toastIcon.className = 'fas fa-exclamation-circle text-danger me-2';
+                    toastTitle.textContent = 'Error';
+                    toast.className = 'toast border-danger';
+                    break;
+                case 'warning':
+                    toastIcon.className = 'fas fa-exclamation-triangle text-warning me-2';
+                    toastTitle.textContent = 'Warning';
+                    toast.className = 'toast border-warning';
+                    break;
+                default:
+                    toastIcon.className = 'fas fa-info-circle text-primary me-2';
+                    toastTitle.textContent = 'Info';
+                    toast.className = 'toast border-primary';
+            }
+
+            toastBody.textContent = message;
+
+            // Show the toast
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: duration
+            });
+            bsToast.show();
+        }
+    </script>
 </body>
 
 </html>

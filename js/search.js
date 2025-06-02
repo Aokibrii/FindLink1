@@ -119,12 +119,25 @@ function showSuggestions(str) {
         let html = "";
         results.forEach((item) => {
           const badgeClass = item.item_type === "Found" ? "Found" : "Lost";
+          const location = item.location ? ` - ${item.location}` : "";
+          const description = item.description
+            ? `<br><small style="color: #666; font-size: 12px;">${item.description.substring(
+                0,
+                60
+              )}${item.description.length > 60 ? "..." : ""}</small>`
+            : "";
           html += `<div class="suggestion" onclick="selectSuggestion('${item.title.replace(
             /'/g,
             "\\'"
-          )}')">${item.title} <span class="item-type ${badgeClass}">${
-            item.item_type
-          }</span></div>`;
+          )}')">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong>${item.title}</strong>${location}
+                ${description}
+              </div>
+              <span class="item-type ${badgeClass}">${item.item_type}</span>
+            </div>
+          </div>`;
         });
         suggestionsDiv.innerHTML = html;
         suggestionsDiv.style.display = "block";

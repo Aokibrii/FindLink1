@@ -24,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['search'])) {
 } elseif (isset($_GET['search'])) {
     $searchTerm = trim($_GET['search']);
     if ($searchTerm !== '') {
-        $stmt = $conn->prepare($sql . " WHERE title LIKE ? OR description LIKE ? ORDER BY created_at DESC");
+        $stmt = $conn->prepare($sql . " WHERE title LIKE ? OR description LIKE ? OR location LIKE ? ORDER BY created_at DESC");
         $likeTerm = "%$searchTerm%";
-        $stmt->bind_param("ss", $likeTerm, $likeTerm);
+        $stmt->bind_param("sss", $likeTerm, $likeTerm, $likeTerm);
         $stmt->execute();
         $result = $stmt->get_result();
     } else {
@@ -39,10 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['search'])) {
 // Handle AJAX search suggestions
 if (isset($_GET['ajax_search']) && isset($_GET['q'])) {
     $q = $conn->real_escape_string($_GET['q']);
-    $stmt = $conn->prepare("SELECT id, title, description, type as item_type FROM posts 
-                           WHERE title LIKE ? OR description LIKE ? ORDER BY created_at DESC LIMIT 5");
+    $stmt = $conn->prepare("SELECT id, title, description, location, type as item_type FROM posts 
+                           WHERE title LIKE ? OR description LIKE ? OR location LIKE ? ORDER BY created_at DESC LIMIT 5");
     $likeQ = "%$q%";
-    $stmt->bind_param("ss", $likeQ, $likeQ);
+    $stmt->bind_param("sss", $likeQ, $likeQ, $likeQ);
     $stmt->execute();
     $res = $stmt->get_result();
     $suggestions = [];
@@ -51,6 +51,7 @@ if (isset($_GET['ajax_search']) && isset($_GET['q'])) {
             'id' => $row['id'],
             'title' => $row['title'],
             'description' => $row['description'],
+            'location' => $row['location'],
             'item_type' => $row['item_type']
         ];
     }
@@ -356,25 +357,50 @@ if (isset($_GET['ajax_search']) && isset($_GET['q'])) {
         }
 
         .suggestion {
-            padding: 12px 15px;
+            padding: 15px;
             border-bottom: 1px solid #f1f5f9;
             cursor: pointer;
             transition: background 0.2s ease;
+            line-height: 1.4;
         }
 
         .suggestion:hover {
             background-color: #f8fafc;
         }
 
+        .suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .suggestion .location-text {
+            color: #6b7280;
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        .suggestion .description-text {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
         .suggestion .item-type {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
-            font-size: 12px;
-            margin-left: 5px;
+            font-size: 11px;
             color: white;
             background-color: #3b82f6;
             font-weight: 500;
+            white-space: nowrap;
+            margin-left: 10px;
+            flex-shrink: 0;
         }
 
         .suggestion .item-type.Found {
@@ -667,7 +693,7 @@ if (isset($_GET['ajax_search']) && isset($_GET['q'])) {
                             <i class="fa fa-search"></i>
                         </div>
                         <form method="POST" class="search-filter" id="searchForm">
-                            <input type="text" name="search" id="searchInput" placeholder="Search for items..."
+                            <input type="text" name="search" id="searchInput" placeholder="Search by item name, description, or location..."
                                 value="<?= htmlspecialchars($searchTerm) ?>" autocomplete="off" onkeyup="showSuggestions(this.value)">
                             <button type="button" class="clear-btn" id="clearSearch">
                                 <i class="fa fa-times"></i>
